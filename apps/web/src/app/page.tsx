@@ -505,13 +505,11 @@ export default function Home() {
                 <List dense disablePadding>
                   {[
                     "Full source code access with perpetual license",
-                    "Priority support with 4-hour SLA response time",
+                    "Priority support",
                     "Private Slack channel with the core team",
-                    "Custom feature development (up to 40 hours/year)",
                     "Early access to all future releases and beta features",
                     "Architecture review and integration consulting",
                     "White-label and redistribution rights",
-                    "On-site training session (up to 2 days)",
                   ].map((item) => (
                     <ListItem key={item} disableGutters sx={{ py: 0.5 }}>
                       <ListItemIcon sx={{ minWidth: 36 }}>
