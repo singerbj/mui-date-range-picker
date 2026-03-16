@@ -41,7 +41,7 @@ importers:
       '@emotion/styled':
         specifier: ^11.14.0
         version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.14)(react@19.2.4))(@types/react@19.2.14)(react@19.2.4)
-      '@mui-date-range-picker/react':
+      '@indexlabs/mui-date-range-picker':
         specifier: workspace:*
         version: link:../../packages/date-range-picker
       '@mui/material':
@@ -84,7 +84,7 @@ importers:
       '@emotion/styled':
         specifier: ^11.14.0
         version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.14)(react@19.2.4))(@types/react@19.2.14)(react@19.2.4)
-      '@mui-date-range-picker/react':
+      '@indexlabs/mui-date-range-picker':
         specifier: workspace:*
         version: link:../../packages/date-range-picker
       '@mui/icons-material':

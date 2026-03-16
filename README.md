@@ -1,4 +1,4 @@
-# mui-date-range-picker
+# @indexlabs/mui-date-range-picker
 
 A React date range picker component built with Material UI 6 and MUI X Date Pickers.
 
@@ -13,10 +13,10 @@ apps/
   web/          → Next.js demo site (port 3000)
   docs/         → Next.js documentation site (port 3001)
 packages/
-  date-range-picker/ → @mui-date-range-picker/react
+  date-range-picker/ → @indexlabs/mui-date-range-picker
 ```
 
-## Package: `@mui-date-range-picker/react`
+## Package: `@indexlabs/mui-date-range-picker`
 
 ### Components
 
@@ -31,11 +31,17 @@ packages/
 - Date constraints: `minDate`, `maxDate`, `disableFuture`, `disablePast`
 - Customizable labels, display format, and input props
 
+### Installation
+
+```bash
+npm install @indexlabs/mui-date-range-picker
+```
+
 ### Usage
 
 ```tsx
 import { createTheme, ThemeProvider } from "@mui/material";
-import { DateRangePicker, DateRangePickerInput } from "@mui-date-range-picker/react";
+import { DateRangePicker, DateRangePickerInput } from "@indexlabs/mui-date-range-picker";
 
 const theme = createTheme({
   palette: { primary: { main: "#1976d2" } },

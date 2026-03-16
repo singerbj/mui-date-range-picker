@@ -4,8 +4,8 @@
   "commit": false,
   "fixed": [],
   "linked": [],
-  "access": "restricted",
+  "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@mui-date-range-picker/web", "@mui-date-range-picker/docs"]
+  "ignore": ["@indexlabs/mui-date-range-picker-web", "@indexlabs/mui-date-range-picker-docs"]
 }
