@@ -6,9 +6,20 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "clean": "turbo run clean"
+    "lint:oxlint": "oxlint --deny-warnings .",
+    "fmt": "oxfmt .",
+    "fmt:check": "oxfmt --check .",
+    "test": "turbo run test",
+    "audit": "better-npm-audit audit --level moderate",
+    "clean": "turbo run clean",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "better-npm-audit": "^3.11.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "oxfmt": "^0.40.0",
+    "oxlint": "^1.55.0",
     "turbo": "^2.5.0"
   },
   "packageManager": "pnpm@10.32.1",

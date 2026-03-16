@@ -1,0 +1,60 @@
+name: Deploy Development
+
+on:
+  push:
+    branches: [dev]
+
+concurrency:
+  group: deploy-dev
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: CI Checks
+    uses: ./.github/workflows/ci.yml
+
+  deploy-web-dev:
+    name: Deploy Web (Development)
+    runs-on: ubuntu-latest
+    needs: [ci]
+    environment: development
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Deploy Web (Dev)
+        run: echo "Deploy web app to development — configure your deployment target here"
+
+  deploy-docs-dev:
+    name: Deploy Docs (Development)
+    runs-on: ubuntu-latest
+    needs: [ci]
+    environment: development
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Deploy Docs (Dev)
+        run: echo "Deploy docs app to development — configure your deployment target here"
