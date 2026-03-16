@@ -43,16 +43,13 @@ function RangeDay(
   props: PickersDayProps<Dayjs> & {
     startDate: Dayjs | null;
     endDate: Dayjs | null;
-  }
+  },
 ) {
   const { day, startDate, endDate, outsideCurrentMonth, ...other } = props;
 
   const isStart = startDate && day.isSame(startDate, "day");
   const isEnd = endDate && day.isSame(endDate, "day");
-  const isBetweenDates =
-    startDate &&
-    endDate &&
-    day.isBetween(startDate, endDate, "day", "()");
+  const isBetweenDates = startDate && endDate && day.isBetween(startDate, endDate, "day", "()");
   const isInRange = isStart || isEnd || isBetweenDates;
 
   return (
@@ -61,8 +58,7 @@ function RangeDay(
         ...(isInRange && {
           bgcolor: "primary.light",
           opacity: 0.3,
-          borderRadius:
-            isStart ? "50% 0 0 50%" : isEnd ? "0 50% 50% 0" : 0,
+          borderRadius: isStart ? "50% 0 0 50%" : isEnd ? "0 50% 50% 0" : 0,
         }),
       }}
     >
@@ -114,7 +110,7 @@ export function DateRangePicker({
       }
       onChange?.(newRange);
     },
-    [value, onChange]
+    [value, onChange],
   );
 
   const [selecting, setSelecting] = useState<"start" | "end">("start");
@@ -136,7 +132,7 @@ export function DateRangePicker({
         }
       }
     },
-    [selecting, range, setRange]
+    [selecting, range, setRange],
   );
 
   const handleClear = () => {
@@ -155,17 +151,6 @@ export function DateRangePicker({
     disableFuture,
     disablePast,
   };
-
-  const renderDay = useCallback(
-    (day: Dayjs, _selectedDays: Dayjs[], pickersDayProps: PickersDayProps<Dayjs>) => (
-      <RangeDay
-        {...pickersDayProps}
-        startDate={range.startDate}
-        endDate={range.endDate}
-      />
-    ),
-    [range.startDate, range.endDate]
-  );
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>

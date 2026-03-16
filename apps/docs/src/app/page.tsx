@@ -15,30 +15,65 @@ import {
   TableRow,
   Divider,
 } from "@mui/material";
-import {
-  DateRangePicker,
-  DateRangePickerInput,
-  DateRange,
-} from "@mui-date-range-picker/react";
-import dayjs from "dayjs";
+import { DateRangePicker, DateRangePickerInput, DateRange } from "@mui-date-range-picker/react";
 
 const dateRangePickerProps = [
-  { name: "value", type: "DateRange", default: "undefined", description: "Controlled date range value" },
-  { name: "onChange", type: "(range: DateRange) => void", default: "undefined", description: "Callback when range changes" },
+  {
+    name: "value",
+    type: "DateRange",
+    default: "undefined",
+    description: "Controlled date range value",
+  },
+  {
+    name: "onChange",
+    type: "(range: DateRange) => void",
+    default: "undefined",
+    description: "Callback when range changes",
+  },
   { name: "minDate", type: "Dayjs", default: "undefined", description: "Minimum selectable date" },
   { name: "maxDate", type: "Dayjs", default: "undefined", description: "Maximum selectable date" },
   { name: "disableFuture", type: "boolean", default: "false", description: "Disable future dates" },
   { name: "disablePast", type: "boolean", default: "false", description: "Disable past dates" },
-  { name: "startLabel", type: "string", default: '"Start Date"', description: "Label for start date" },
+  {
+    name: "startLabel",
+    type: "string",
+    default: '"Start Date"',
+    description: "Label for start date",
+  },
   { name: "endLabel", type: "string", default: '"End Date"', description: "Label for end date" },
-  { name: "showActions", type: "boolean", default: "false", description: "Show Apply/Clear buttons" },
-  { name: "onApply", type: "(range: DateRange) => void", default: "undefined", description: "Callback for Apply button" },
-  { name: "onClear", type: "() => void", default: "undefined", description: "Callback for Clear button" },
+  {
+    name: "showActions",
+    type: "boolean",
+    default: "false",
+    description: "Show Apply/Clear buttons",
+  },
+  {
+    name: "onApply",
+    type: "(range: DateRange) => void",
+    default: "undefined",
+    description: "Callback for Apply button",
+  },
+  {
+    name: "onClear",
+    type: "() => void",
+    default: "undefined",
+    description: "Callback for Clear button",
+  },
 ];
 
 const inputProps = [
-  { name: "placeholder", type: "string", default: '"Select date range"', description: "Input placeholder text" },
-  { name: "displayFormat", type: "string", default: '"MMM D, YYYY"', description: "Date display format" },
+  {
+    name: "placeholder",
+    type: "string",
+    default: '"Select date range"',
+    description: "Input placeholder text",
+  },
+  {
+    name: "displayFormat",
+    type: "string",
+    default: '"MMM D, YYYY"',
+    description: "Date display format",
+  },
   { name: "disabled", type: "boolean", default: "false", description: "Disable the input" },
   { name: "fullWidth", type: "boolean", default: "false", description: "Full width input" },
   { name: "size", type: '"small" | "medium"', default: '"medium"', description: "Input size" },
@@ -51,18 +86,32 @@ function PropsTable({ rows }: { rows: typeof dateRangePickerProps }) {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell><strong>Prop</strong></TableCell>
-            <TableCell><strong>Type</strong></TableCell>
-            <TableCell><strong>Default</strong></TableCell>
-            <TableCell><strong>Description</strong></TableCell>
+            <TableCell>
+              <strong>Prop</strong>
+            </TableCell>
+            <TableCell>
+              <strong>Type</strong>
+            </TableCell>
+            <TableCell>
+              <strong>Default</strong>
+            </TableCell>
+            <TableCell>
+              <strong>Description</strong>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map((row) => (
             <TableRow key={row.name}>
-              <TableCell><code>{row.name}</code></TableCell>
-              <TableCell><code>{row.type}</code></TableCell>
-              <TableCell><code>{row.default}</code></TableCell>
+              <TableCell>
+                <code>{row.name}</code>
+              </TableCell>
+              <TableCell>
+                <code>{row.type}</code>
+              </TableCell>
+              <TableCell>
+                <code>{row.default}</code>
+              </TableCell>
               <TableCell>{row.description}</TableCell>
             </TableRow>
           ))}
@@ -94,8 +143,8 @@ export default function DocsPage() {
         Documentation
       </Typography>
       <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-        <code>@mui-date-range-picker/react</code> provides two components for
-        selecting date ranges using Material UI.
+        <code>@mui-date-range-picker/react</code> provides two components for selecting date ranges
+        using Material UI.
       </Typography>
 
       <Stack spacing={6}>
@@ -105,7 +154,10 @@ export default function DocsPage() {
             Installation
           </Typography>
           <Paper variant="outlined" sx={{ p: 2, bgcolor: "grey.50" }}>
-            <code>npm install @mui-date-range-picker/react @mui/material @mui/x-date-pickers @emotion/react @emotion/styled dayjs</code>
+            <code>
+              npm install @mui-date-range-picker/react @mui/material @mui/x-date-pickers
+              @emotion/react @emotion/styled dayjs
+            </code>
           </Paper>
         </Box>
 
@@ -170,7 +222,8 @@ export default function DocsPage() {
             Props
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-            Inherits all DateRangePicker props except <code>showActions</code>, <code>onApply</code>, and <code>onClear</code>. Additional props:
+            Inherits all DateRangePicker props except <code>showActions</code>, <code>onApply</code>
+            , and <code>onClear</code>. Additional props:
           </Typography>
           <PropsTable rows={inputProps} />
         </Box>
@@ -183,13 +236,14 @@ export default function DocsPage() {
             Theme Support
           </Typography>
           <Typography variant="body1">
-            Both components fully inherit styles from the MUI theme. Wrap your app
-            in a <code>ThemeProvider</code> with a custom theme, and the date range
-            picker will automatically use your palette, typography, and other theme
-            settings.
+            Both components fully inherit styles from the MUI theme. Wrap your app in a{" "}
+            <code>ThemeProvider</code> with a custom theme, and the date range picker will
+            automatically use your palette, typography, and other theme settings.
           </Typography>
           <Paper variant="outlined" sx={{ p: 2, mt: 2, bgcolor: "grey.50" }}>
-            <pre style={{ margin: 0, fontSize: 14 }}>{`import { createTheme, ThemeProvider } from "@mui/material";
+            <pre
+              style={{ margin: 0, fontSize: 14 }}
+            >{`import { createTheme, ThemeProvider } from "@mui/material";
 import { DateRangePicker } from "@mui-date-range-picker/react";
 
 const theme = createTheme({

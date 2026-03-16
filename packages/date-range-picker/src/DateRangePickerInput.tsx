@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
-import { TextField, Popover, Box, SvgIcon } from "@mui/material";
-import { Dayjs } from "dayjs";
+import { TextField, Popover, SvgIcon } from "@mui/material";
 
 function CalendarIcon(props: React.ComponentProps<typeof SvgIcon>) {
   return (
@@ -11,8 +10,10 @@ function CalendarIcon(props: React.ComponentProps<typeof SvgIcon>) {
 }
 import { DateRangePicker, DateRange, DateRangePickerProps } from "./DateRangePicker";
 
-export interface DateRangePickerInputProps
-  extends Omit<DateRangePickerProps, "showActions" | "onApply" | "onClear"> {
+export interface DateRangePickerInputProps extends Omit<
+  DateRangePickerProps,
+  "showActions" | "onApply" | "onClear"
+> {
   /** Placeholder text for the input */
   placeholder?: string;
   /** Format string for displaying dates */
@@ -91,11 +92,7 @@ export function DateRangePickerInput({
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         transformOrigin={{ vertical: "top", horizontal: "left" }}
       >
-        <DateRangePicker
-          {...pickerProps}
-          value={range}
-          onChange={handleChange}
-        />
+        <DateRangePicker {...pickerProps} value={range} onChange={handleChange} />
       </Popover>
     </>
   );

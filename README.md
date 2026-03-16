@@ -73,12 +73,12 @@ pnpm build     # Build all packages and apps
 
 ### Commands
 
-| Command      | Description                  |
-| ------------ | ---------------------------- |
-| `pnpm dev`   | Start all apps in dev mode   |
-| `pnpm build` | Build all packages and apps  |
-| `pnpm lint`  | Lint all packages and apps   |
-| `pnpm clean` | Clean build artifacts        |
+| Command      | Description                 |
+| ------------ | --------------------------- |
+| `pnpm dev`   | Start all apps in dev mode  |
+| `pnpm build` | Build all packages and apps |
+| `pnpm lint`  | Lint all packages and apps  |
+| `pnpm clean` | Clean build artifacts       |
 
 ## License
 
