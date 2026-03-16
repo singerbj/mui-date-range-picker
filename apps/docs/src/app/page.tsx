@@ -59,6 +59,13 @@ const dateRangePickerProps = [
     default: "undefined",
     description: "Callback for Clear button",
   },
+  {
+    name: "presets",
+    type: "boolean | PresetRange[]",
+    default: "undefined",
+    description:
+      "Show preset range options. Pass true for defaults (7, 15, 30, 90 days) or a custom array.",
+  },
 ];
 
 const inputProps = [
@@ -121,6 +128,33 @@ function PropsTable({ rows }: { rows: typeof dateRangePickerProps }) {
   );
 }
 
+function CodeBlock({ code }: { code: string }) {
+  return (
+    <Paper
+      variant="outlined"
+      sx={{
+        p: 2,
+        bgcolor: "#1e1e1e",
+        borderRadius: 2,
+        overflow: "auto",
+        mb: 3,
+      }}
+    >
+      <pre
+        style={{
+          margin: 0,
+          fontSize: 13,
+          lineHeight: 1.6,
+          color: "#d4d4d4",
+          fontFamily: "'Fira Code', 'Cascadia Code', Consolas, monospace",
+        }}
+      >
+        {code}
+      </pre>
+    </Paper>
+  );
+}
+
 export default function DocsPage() {
   const [basicRange, setBasicRange] = useState<DateRange>({
     startDate: null,
@@ -128,6 +162,11 @@ export default function DocsPage() {
   });
 
   const [constrainedRange, setConstrainedRange] = useState<DateRange>({
+    startDate: null,
+    endDate: null,
+  });
+
+  const [presetRange, setPresetRange] = useState<DateRange>({
     startDate: null,
     endDate: null,
   });
@@ -153,12 +192,9 @@ export default function DocsPage() {
           <Typography variant="h4" gutterBottom>
             Installation
           </Typography>
-          <Paper variant="outlined" sx={{ p: 2, bgcolor: "grey.50" }}>
-            <code>
-              npm install @mui-date-range-picker/react @mui/material @mui/x-date-pickers
-              @emotion/react @emotion/styled dayjs
-            </code>
-          </Paper>
+          <CodeBlock
+            code={`npm install @mui-date-range-picker/react @mui/material @mui/x-date-pickers @emotion/react @emotion/styled dayjs`}
+          />
         </Box>
 
         <Divider />
@@ -172,17 +208,47 @@ export default function DocsPage() {
             An inline dual-calendar date range picker with optional action buttons.
           </Typography>
 
+          {/* Basic Usage */}
           <Typography variant="h6" gutterBottom>
             Basic Usage
           </Typography>
+          <CodeBlock
+            code={`import { useState } from "react";
+import { DateRangePicker, DateRange } from "@mui-date-range-picker/react";
+
+function BasicExample() {
+  const [range, setRange] = useState<DateRange>({
+    startDate: null,
+    endDate: null,
+  });
+
+  return (
+    <DateRangePicker
+      value={range}
+      onChange={setRange}
+      showActions
+    />
+  );
+}`}
+          />
           <DateRangePicker value={basicRange} onChange={setBasicRange} showActions />
 
+          {/* With Date Constraints */}
           <Typography variant="h6" sx={{ mt: 4, mb: 1 }}>
             With Date Constraints
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Restrict selection to past dates only:
+            Restrict selection to past dates only with custom labels:
           </Typography>
+          <CodeBlock
+            code={`<DateRangePicker
+  value={range}
+  onChange={setRange}
+  disableFuture
+  startLabel="Check-in"
+  endLabel="Check-out"
+/>`}
+          />
           <DateRangePicker
             value={constrainedRange}
             onChange={setConstrainedRange}
@@ -191,6 +257,37 @@ export default function DocsPage() {
             endLabel="Check-out"
           />
 
+          {/* With Preset Ranges */}
+          <Typography variant="h6" sx={{ mt: 4, mb: 1 }}>
+            With Preset Ranges
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            Enable quick-select preset ranges with <code>presets=&#123;true&#125;</code> for
+            defaults, or pass a custom array:
+          </Typography>
+          <CodeBlock
+            code={`// Use default presets (Last 7, 15, 30, 90 days)
+<DateRangePicker
+  value={range}
+  onChange={setRange}
+  presets
+/>
+
+// Or use custom presets
+<DateRangePicker
+  value={range}
+  onChange={setRange}
+  presets={[
+    { label: "Last week", days: 7 },
+    { label: "Last month", days: 30 },
+    { label: "Last quarter", days: 90 },
+    { label: "Last year", days: 365 },
+  ]}
+/>`}
+          />
+          <DateRangePicker value={presetRange} onChange={setPresetRange} presets />
+
+          {/* Props Table */}
           <Typography variant="h6" sx={{ mt: 4, mb: 1 }}>
             Props
           </Typography>
@@ -207,6 +304,28 @@ export default function DocsPage() {
           <Typography variant="body1" sx={{ mb: 2 }}>
             A text field that opens a DateRangePicker in a popover on click.
           </Typography>
+
+          <CodeBlock
+            code={`import { useState } from "react";
+import { DateRangePickerInput, DateRange } from "@mui-date-range-picker/react";
+
+function InputExample() {
+  const [range, setRange] = useState<DateRange>({
+    startDate: null,
+    endDate: null,
+  });
+
+  return (
+    <DateRangePickerInput
+      value={range}
+      onChange={setRange}
+      label="Select Dates"
+      fullWidth
+      size="small"
+    />
+  );
+}`}
+          />
 
           <Box sx={{ maxWidth: 400, mb: 3 }}>
             <DateRangePickerInput
@@ -230,20 +349,40 @@ export default function DocsPage() {
 
         <Divider />
 
+        {/* Types */}
+        <Box>
+          <Typography variant="h4" gutterBottom>
+            Types
+          </Typography>
+          <CodeBlock
+            code={`import { Dayjs } from "dayjs";
+
+interface DateRange {
+  startDate: Dayjs | null;
+  endDate: Dayjs | null;
+}
+
+interface PresetRange {
+  label: string;
+  days: number;
+}`}
+          />
+        </Box>
+
+        <Divider />
+
         {/* Theme Support */}
         <Box>
           <Typography variant="h4" gutterBottom>
             Theme Support
           </Typography>
-          <Typography variant="body1">
+          <Typography variant="body1" sx={{ mb: 2 }}>
             Both components fully inherit styles from the MUI theme. Wrap your app in a{" "}
             <code>ThemeProvider</code> with a custom theme, and the date range picker will
             automatically use your palette, typography, and other theme settings.
           </Typography>
-          <Paper variant="outlined" sx={{ p: 2, mt: 2, bgcolor: "grey.50" }}>
-            <pre
-              style={{ margin: 0, fontSize: 14 }}
-            >{`import { createTheme, ThemeProvider } from "@mui/material";
+          <CodeBlock
+            code={`import { createTheme, ThemeProvider } from "@mui/material";
 import { DateRangePicker } from "@mui-date-range-picker/react";
 
 const theme = createTheme({
@@ -258,8 +397,8 @@ function App() {
       <DateRangePicker />
     </ThemeProvider>
   );
-}`}</pre>
-          </Paper>
+}`}
+          />
         </Box>
       </Stack>
     </Container>
