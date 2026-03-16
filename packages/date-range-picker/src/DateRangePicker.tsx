@@ -6,6 +6,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { PickersDay, PickersDayProps } from "@mui/x-date-pickers/PickersDay";
 import dayjs, { Dayjs } from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
+import { useLicense } from "./license/useLicense";
+import { LicenseWatermark } from "./license/Watermark";
 
 dayjs.extend(isBetween);
 
@@ -152,9 +154,19 @@ export function DateRangePicker({
     disablePast,
   };
 
+  const { isLicensed } = useLicense();
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Paper elevation={3} sx={{ display: "inline-block", p: 2 }}>
+      <Paper
+        elevation={3}
+        sx={{ display: "inline-block", p: 2, position: "relative" }}
+        {...(!isLicensed && {
+          "data-mui-drp-license": "unlicensed",
+          className: "mui-drp-unlicensed",
+        })}
+      >
+        {!isLicensed && <LicenseWatermark />}
         <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
           <Box sx={{ flex: 1 }}>
             <Typography variant="caption" color="text.secondary">

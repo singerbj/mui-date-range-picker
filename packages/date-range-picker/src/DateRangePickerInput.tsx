@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
-import { TextField, Popover, SvgIcon } from "@mui/material";
+import { TextField, Popover, SvgIcon, Box } from "@mui/material";
+import { useLicense } from "./license/useLicense";
+import { LicenseWatermark } from "./license/Watermark";
 
 function CalendarIcon(props: React.ComponentProps<typeof SvgIcon>) {
   return (
@@ -66,8 +68,19 @@ export function DateRangePickerInput({
     }
   };
 
+  const { isLicensed } = useLicense();
+
   return (
     <>
+      <Box
+        sx={{ position: "relative", display: fullWidth ? "block" : "inline-block" }}
+        {...(!isLicensed && {
+          "data-mui-drp-license": "unlicensed",
+          className: "mui-drp-unlicensed",
+        })}
+      >
+        {!isLicensed && <LicenseWatermark />}
+      </Box>
       <TextField
         ref={inputRef}
         value={displayValue}
