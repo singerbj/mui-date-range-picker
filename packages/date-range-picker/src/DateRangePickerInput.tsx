@@ -79,6 +79,9 @@ export function DateRangePickerInput({
             endAdornment: <CalendarIcon color="action" />,
             sx: { cursor: disabled ? "default" : "pointer" },
           },
+          inputLabel: {
+            shrink: true,
+          },
         }}
         disabled={disabled}
         fullWidth={fullWidth}

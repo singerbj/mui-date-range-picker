@@ -1,5 +1,14 @@
 import React, { useState, useCallback } from "react";
-import { Box, Paper, Divider, Button, Typography } from "@mui/material";
+import {
+  Box,
+  Paper,
+  Divider,
+  Button,
+  Typography,
+  List,
+  ListItemButton,
+  ListItemText,
+} from "@mui/material";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -13,6 +22,18 @@ export interface DateRange {
   startDate: Dayjs | null;
   endDate: Dayjs | null;
 }
+
+export interface PresetRange {
+  label: string;
+  days: number;
+}
+
+export const defaultPresets: PresetRange[] = [
+  { label: "Last 7 days", days: 7 },
+  { label: "Last 15 days", days: 15 },
+  { label: "Last 30 days", days: 30 },
+  { label: "Last 90 days", days: 90 },
+];
 
 export interface DateRangePickerProps {
   /** The current date range value */
@@ -37,6 +58,8 @@ export interface DateRangePickerProps {
   onApply?: (range: DateRange) => void;
   /** Callback fired when the Clear button is clicked */
   onClear?: () => void;
+  /** Preset range options to display. Pass true for defaults, or an array of custom presets. */
+  presets?: boolean | PresetRange[];
 }
 
 function RangeDay(
@@ -55,11 +78,20 @@ function RangeDay(
   return (
     <Box
       sx={{
-        ...(isInRange && {
-          bgcolor: "primary.light",
-          opacity: 0.3,
-          borderRadius: isStart ? "50% 0 0 50%" : isEnd ? "0 50% 50% 0" : 0,
-        }),
+        position: "relative",
+        ...(isInRange &&
+          !outsideCurrentMonth && {
+            "&::before": {
+              content: '""',
+              position: "absolute",
+              top: 2,
+              bottom: 2,
+              left: isStart ? "50%" : 0,
+              right: isEnd ? "50%" : 0,
+              bgcolor: "primary.main",
+              opacity: 0.12,
+            },
+          }),
       }}
     >
       <PickersDay
@@ -68,16 +100,26 @@ function RangeDay(
         outsideCurrentMonth={outsideCurrentMonth}
         disableMargin
         sx={{
-          ...((isStart || isEnd) && {
-            bgcolor: "primary.main",
-            color: "primary.contrastText",
-            "&:hover": {
-              bgcolor: "primary.dark",
-            },
-            "&:focus": {
+          position: "relative",
+          zIndex: 1,
+          ...((isStart || isEnd) &&
+            !outsideCurrentMonth && {
               bgcolor: "primary.main",
-            },
-          }),
+              color: "primary.contrastText",
+              "&:hover": {
+                bgcolor: "primary.dark",
+              },
+              "&:focus": {
+                bgcolor: "primary.main",
+              },
+            }),
+          ...(isBetweenDates &&
+            !outsideCurrentMonth && {
+              bgcolor: "transparent",
+              "&:hover": {
+                bgcolor: "primary.light",
+              },
+            }),
         }}
       />
     </Box>
@@ -96,6 +138,7 @@ export function DateRangePicker({
   showActions = false,
   onApply,
   onClear,
+  presets,
 }: DateRangePickerProps) {
   const [internalRange, setInternalRange] = useState<DateRange>({
     startDate: null,
@@ -145,6 +188,17 @@ export function DateRangePicker({
     onApply?.(range);
   };
 
+  const presetList = presets === true ? defaultPresets : presets || null;
+
+  const handlePreset = (days: number) => {
+    const end = dayjs();
+    const start = end.subtract(days, "day");
+    setRange({ startDate: start, endDate: end });
+    setSelecting("start");
+    setLeftMonth(start);
+    setRightMonth(start.add(1, "month"));
+  };
+
   const calendarProps = {
     minDate,
     maxDate,
@@ -176,7 +230,33 @@ export function DateRangePicker({
 
         <Divider sx={{ mb: 1 }} />
 
-        <Box sx={{ display: "flex", gap: 2 }}>
+        <Box sx={{ display: "flex", gap: 0 }}>
+          {presetList && (
+            <Box sx={{ borderRight: 1, borderColor: "divider", pr: 1, mr: 1, minWidth: 140 }}>
+              <List dense disablePadding>
+                {presetList.map((preset) => {
+                  const presetStart = dayjs().subtract(preset.days, "day");
+                  const presetEnd = dayjs();
+                  const isActive =
+                    range.startDate?.isSame(presetStart, "day") &&
+                    range.endDate?.isSame(presetEnd, "day");
+                  return (
+                    <ListItemButton
+                      key={preset.days}
+                      selected={isActive}
+                      onClick={() => handlePreset(preset.days)}
+                      sx={{ borderRadius: 1, py: 0.5 }}
+                    >
+                      <ListItemText
+                        primary={preset.label}
+                        primaryTypographyProps={{ variant: "body2" }}
+                      />
+                    </ListItemButton>
+                  );
+                })}
+              </List>
+            </Box>
+          )}
           <DateCalendar
             {...calendarProps}
             value={leftMonth}
