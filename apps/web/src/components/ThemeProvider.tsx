@@ -2,6 +2,11 @@
 
 import { ThemeProvider as MuiThemeProvider, createTheme, CssBaseline } from "@mui/material";
 import { ReactNode } from "react";
+import { LicenseInfo } from "@mui-date-range-picker/react";
+
+LicenseInfo.setLicenseKey(
+  "eyJvIjoiU0lURS0wMDEiLCJlIjo0MTAyNDQ0ODAwMDAwLCJwIjoiZW50ZXJwcmlzZSJ9.1hgwrud",
+);
 
 const theme = createTheme({
   palette: {
