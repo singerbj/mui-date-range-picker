@@ -48,8 +48,12 @@ jobs:
         if: steps.changesets.outputs.published == 'true'
         run: |
           for pkg in $(echo '${{ steps.changesets.outputs.publishedPackages }}' | jq -r '.[] | "\(.name)@\(.version)"'); do
-            echo "Tagging $pkg"
-            git tag "$pkg"
+            if git rev-parse "$pkg" >/dev/null 2>&1; then
+              echo "Tag $pkg already exists, skipping"
+            else
+              echo "Tagging $pkg"
+              git tag "$pkg"
+            fi
           done
           git push --tags
         env:
