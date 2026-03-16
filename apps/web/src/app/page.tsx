@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Container,
   Typography,
@@ -61,6 +61,17 @@ export default function Home() {
   const { mode, toggleColorMode } = useColorMode();
   const isDark = mode === "dark";
 
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
   const [range, setRange] = useState<DateRange>({
     startDate: null,
     endDate: null,
@@ -92,7 +103,27 @@ export default function Home() {
   const codeAccent = isDark ? "#90caf9" : "#1976d2";
 
   return (
-    <Box sx={{ position: "relative", overflow: "hidden", minHeight: "100vh", bgcolor: pageBg }}>
+    <Box
+      ref={containerRef}
+      sx={{ position: "relative", overflow: "hidden", minHeight: "100vh", bgcolor: pageBg }}
+    >
+      {/* Mouse-reactive background glow */}
+      <Box
+        sx={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          pointerEvents: "none",
+          zIndex: 0,
+          background: `radial-gradient(800px circle at ${mousePos.x}px ${mousePos.y}px, ${
+            isDark ? "rgba(25, 118, 210, 0.12)" : "rgba(25, 118, 210, 0.07)"
+          }, transparent 40%)`,
+          transition: "background 0.15s ease",
+        }}
+      />
+
       {/* Background glow orbs */}
       <GlowOrb color="#1976d2" size={600} top="-10%" left="-5%" delay={0} />
       <GlowOrb color="#9c27b0" size={500} top="20%" left="70%" delay={2} />
@@ -152,9 +183,23 @@ export default function Home() {
                   mb: 2,
                   fontSize: { xs: "2.5rem", md: "3.5rem" },
                   background: gradientText,
+                  backgroundSize: "200% 200%",
                   backgroundClip: "text",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
+                  animation: "glowPulse 3s ease-in-out infinite, gradientShift 4s ease-in-out infinite",
+                  "@keyframes glowPulse": {
+                    "0%, 100%": {
+                      filter: `drop-shadow(0 0 8px ${isDark ? "rgba(144, 202, 249, 0.4)" : "rgba(25, 118, 210, 0.3)"})`,
+                    },
+                    "50%": {
+                      filter: `drop-shadow(0 0 20px ${isDark ? "rgba(206, 147, 216, 0.6)" : "rgba(156, 39, 176, 0.4)"}) drop-shadow(0 0 40px ${isDark ? "rgba(144, 202, 249, 0.3)" : "rgba(25, 118, 210, 0.2)"})`,
+                    },
+                  },
+                  "@keyframes gradientShift": {
+                    "0%, 100%": { backgroundPosition: "0% 50%" },
+                    "50%": { backgroundPosition: "100% 50%" },
+                  },
                 }}
               >
                 MUI Date Range Picker
@@ -505,13 +550,11 @@ export default function Home() {
                 <List dense disablePadding>
                   {[
                     "Full source code access with perpetual license",
-                    "Priority support with 4-hour SLA response time",
+                    "Priority support",
                     "Private Slack channel with the core team",
-                    "Custom feature development (up to 40 hours/year)",
                     "Early access to all future releases and beta features",
                     "Architecture review and integration consulting",
                     "White-label and redistribution rights",
-                    "On-site training session (up to 2 days)",
                   ].map((item) => (
                     <ListItem key={item} disableGutters sx={{ py: 0.5 }}>
                       <ListItemIcon sx={{ minWidth: 36 }}>
