@@ -236,6 +236,9 @@ export default function Home() {
                   borderRadius: 3,
                   bgcolor: "rgba(255,255,255,0.03)",
                   border: "1px solid rgba(255,255,255,0.08)",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
                 }}
               >
                 <DateRangePicker
@@ -486,7 +489,7 @@ export default function Home() {
                     borderRadius: 2,
                     boxShadow: "0 0 20px rgba(25, 118, 210, 0.4)",
                   }}
-                  onClick={() => window.open("mailto:sales@mui-date-range-picker.com", "_blank")}
+                  onClick={() => window.open("mailto:benjaminjsinger@gmail.com", "_blank")}
                 >
                   Contact Sales
                 </Button>
