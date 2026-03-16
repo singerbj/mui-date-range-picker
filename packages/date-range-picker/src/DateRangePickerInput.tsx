@@ -71,16 +71,14 @@ export function DateRangePickerInput({
   const { isLicensed } = useLicense();
 
   return (
-    <>
-      <Box
-        sx={{ position: "relative", display: fullWidth ? "block" : "inline-block" }}
-        {...(!isLicensed && {
-          "data-mui-drp-license": "unlicensed",
-          className: "mui-drp-unlicensed",
-        })}
-      >
-        {!isLicensed && <LicenseWatermark />}
-      </Box>
+    <Box
+      sx={{ position: "relative", display: fullWidth ? "block" : "inline-block" }}
+      {...(!isLicensed && {
+        "data-mui-drp-license": "unlicensed",
+        className: "mui-drp-unlicensed",
+      })}
+    >
+      {!isLicensed && <LicenseWatermark />}
       <TextField
         ref={inputRef}
         value={displayValue}
@@ -110,6 +108,6 @@ export function DateRangePickerInput({
       >
         <DateRangePicker {...pickerProps} value={range} onChange={handleChange} />
       </Popover>
-    </>
+    </Box>
   );
 }

@@ -70,7 +70,7 @@ function RangeDay(
     endDate: Dayjs | null;
   },
 ) {
-  const { day, startDate, endDate, outsideCurrentMonth, ...other } = props;
+  const { day, startDate, endDate, outsideCurrentMonth, selected: _selected, ...other } = props;
 
   const isStart = startDate && day.isSame(startDate, "day");
   const isEnd = endDate && day.isSame(endDate, "day");
@@ -100,6 +100,7 @@ function RangeDay(
         {...other}
         day={day}
         outsideCurrentMonth={outsideCurrentMonth}
+        selected={Boolean((isStart || isEnd) && !outsideCurrentMonth)}
         disableMargin
         sx={{
           position: "relative",
@@ -214,117 +215,137 @@ export function DateRangePicker({
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Paper
         elevation={3}
-        sx={{ display: "inline-block", p: 2, position: "relative" }}
+        sx={{ display: "inline-flex", position: "relative" }}
         {...(!isLicensed && {
           "data-mui-drp-license": "unlicensed",
           className: "mui-drp-unlicensed",
         })}
       >
         {!isLicensed && <LicenseWatermark />}
-        <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
-          <Box sx={{ flex: 1 }}>
-            <Typography variant="caption" color="text.secondary">
-              {startLabel}
-            </Typography>
-            <Typography variant="body2" fontWeight={selecting === "start" ? 700 : 400}>
-              {range.startDate ? range.startDate.format("MMM D, YYYY") : "—"}
-            </Typography>
+
+        {/* Preset sidebar - full height */}
+        {presetList && (
+          <Box
+            sx={{
+              borderRight: 1,
+              borderColor: "divider",
+              py: 2,
+              px: 1,
+              minWidth: 140,
+              display: "flex",
+              alignItems: "flex-start",
+            }}
+          >
+            <List dense disablePadding>
+              {presetList.map((preset) => {
+                const presetStart = dayjs().subtract(preset.days, "day");
+                const presetEnd = dayjs();
+                const isActive =
+                  range.startDate?.isSame(presetStart, "day") &&
+                  range.endDate?.isSame(presetEnd, "day");
+                return (
+                  <ListItemButton
+                    key={preset.days}
+                    selected={isActive}
+                    onClick={() => handlePreset(preset.days)}
+                    sx={{ borderRadius: 1, py: 0.5 }}
+                  >
+                    <ListItemText
+                      primary={preset.label}
+                      primaryTypographyProps={{ variant: "body2" }}
+                    />
+                  </ListItemButton>
+                );
+              })}
+            </List>
           </Box>
-          <Box sx={{ flex: 1 }}>
-            <Typography variant="caption" color="text.secondary">
-              {endLabel}
-            </Typography>
-            <Typography variant="body2" fontWeight={selecting === "end" ? 700 : 400}>
-              {range.endDate ? range.endDate.format("MMM D, YYYY") : "—"}
-            </Typography>
-          </Box>
-        </Box>
-
-        <Divider sx={{ mb: 1 }} />
-
-        <Box sx={{ display: "flex", gap: 0 }}>
-          {presetList && (
-            <Box sx={{ borderRight: 1, borderColor: "divider", pr: 1, mr: 1, minWidth: 140 }}>
-              <List dense disablePadding>
-                {presetList.map((preset) => {
-                  const presetStart = dayjs().subtract(preset.days, "day");
-                  const presetEnd = dayjs();
-                  const isActive =
-                    range.startDate?.isSame(presetStart, "day") &&
-                    range.endDate?.isSame(presetEnd, "day");
-                  return (
-                    <ListItemButton
-                      key={preset.days}
-                      selected={isActive}
-                      onClick={() => handlePreset(preset.days)}
-                      sx={{ borderRadius: 1, py: 0.5 }}
-                    >
-                      <ListItemText
-                        primary={preset.label}
-                        primaryTypographyProps={{ variant: "body2" }}
-                      />
-                    </ListItemButton>
-                  );
-                })}
-              </List>
-            </Box>
-          )}
-          <DateCalendar
-            {...calendarProps}
-            value={leftMonth}
-            onChange={(day) => day && handleDayClick(day)}
-            onMonthChange={(month) => {
-              setLeftMonth(month);
-              if (month.isSame(rightMonth, "month") || month.isAfter(rightMonth, "month")) {
-                setRightMonth(month.add(1, "month"));
-              }
-            }}
-            slots={{ day: RangeDay as any }}
-            slotProps={{
-              day: {
-                startDate: range.startDate,
-                endDate: range.endDate,
-              } as any,
-            }}
-          />
-          <DateCalendar
-            {...calendarProps}
-            value={rightMonth}
-            onChange={(day) => day && handleDayClick(day)}
-            onMonthChange={(month) => {
-              setRightMonth(month);
-              if (month.isSame(leftMonth, "month") || month.isBefore(leftMonth, "month")) {
-                setLeftMonth(month.subtract(1, "month"));
-              }
-            }}
-            slots={{ day: RangeDay as any }}
-            slotProps={{
-              day: {
-                startDate: range.startDate,
-                endDate: range.endDate,
-              } as any,
-            }}
-          />
-        </Box>
-
-        {showActions && (
-          <>
-            <Divider sx={{ mt: 1 }} />
-            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1, mt: 2 }}>
-              <Button size="small" onClick={handleClear}>
-                Clear
-              </Button>
-              <Button
-                size="small"
-                variant="contained"
-                onClick={handleApply}
-                disabled={!range.startDate || !range.endDate}
-              >
-                Apply
-              </Button>
-            </Box>
-          </>
         )}
+
+        {/* Main content: calendars with date labels */}
+        <Box sx={{ display: "flex", flexDirection: "column", p: 2 }}>
+          <Box sx={{ display: "flex", gap: 0 }}>
+            {/* Left calendar with start date label */}
+            <Box>
+              <Box sx={{ px: 1, mb: 1 }}>
+                <Typography variant="caption" color="text.secondary">
+                  {startLabel}
+                </Typography>
+                <Typography variant="body2" fontWeight={selecting === "start" ? 700 : 400}>
+                  {range.startDate ? range.startDate.format("MMM D, YYYY") : "—"}
+                </Typography>
+              </Box>
+              <DateCalendar
+                {...calendarProps}
+                value={null}
+                referenceDate={leftMonth}
+                onChange={(day) => day && handleDayClick(day)}
+                onMonthChange={(month) => {
+                  setLeftMonth(month);
+                  if (month.isSame(rightMonth, "month") || month.isAfter(rightMonth, "month")) {
+                    setRightMonth(month.add(1, "month"));
+                  }
+                }}
+                slots={{ day: RangeDay as any }}
+                slotProps={{
+                  day: {
+                    startDate: range.startDate,
+                    endDate: range.endDate,
+                  } as any,
+                }}
+              />
+            </Box>
+
+            {/* Right calendar with end date label */}
+            <Box>
+              <Box sx={{ px: 1, mb: 1 }}>
+                <Typography variant="caption" color="text.secondary">
+                  {endLabel}
+                </Typography>
+                <Typography variant="body2" fontWeight={selecting === "end" ? 700 : 400}>
+                  {range.endDate ? range.endDate.format("MMM D, YYYY") : "—"}
+                </Typography>
+              </Box>
+              <DateCalendar
+                {...calendarProps}
+                value={null}
+                referenceDate={rightMonth}
+                onChange={(day) => day && handleDayClick(day)}
+                onMonthChange={(month) => {
+                  setRightMonth(month);
+                  if (month.isSame(leftMonth, "month") || month.isBefore(leftMonth, "month")) {
+                    setLeftMonth(month.subtract(1, "month"));
+                  }
+                }}
+                slots={{ day: RangeDay as any }}
+                slotProps={{
+                  day: {
+                    startDate: range.startDate,
+                    endDate: range.endDate,
+                  } as any,
+                }}
+              />
+            </Box>
+          </Box>
+
+          {showActions && (
+            <>
+              <Divider sx={{ mt: 1 }} />
+              <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1, mt: 2 }}>
+                <Button size="small" onClick={handleClear}>
+                  Clear
+                </Button>
+                <Button
+                  size="small"
+                  variant="contained"
+                  onClick={handleApply}
+                  disabled={!range.startDate || !range.endDate}
+                >
+                  Apply
+                </Button>
+              </Box>
+            </>
+          )}
+        </Box>
       </Paper>
     </LocalizationProvider>
   );
