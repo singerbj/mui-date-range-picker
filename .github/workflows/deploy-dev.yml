@@ -1,0 +1,44 @@
+name: Deploy Development
+
+on:
+  push:
+    branches: [dev]
+
+concurrency:
+  group: deploy-dev
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: CI Checks
+    uses: ./.github/workflows/ci.yml
+
+  build:
+    name: Build Static Sites (Dev)
+    runs-on: ubuntu-latest
+    needs: [ci]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build all packages
+        run: pnpm build
+
+      - name: Verify static outputs
+        run: |
+          echo "Web app static files:"
+          ls -la apps/web/out/
+          echo ""
+          echo "Docs app static files:"
+          ls -la apps/docs/out/
+          echo ""
+          echo "Dev build verified. To deploy dev to a preview environment,"
+          echo "configure a separate hosting target (e.g. Cloudflare Pages, Vercel, Netlify)."

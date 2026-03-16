@@ -2,6 +2,9 @@
   "name": "@mui-date-range-picker/react",
   "version": "0.1.0",
   "license": "SEE LICENSE IN LICENSE",
+  "files": [
+    "dist"
+  ],
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -12,12 +15,31 @@
       "require": "./dist/index.js"
     }
   },
-  "files": ["dist"],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "clean": "rm -rf dist .turbo"
+  },
+  "devDependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/material": "^6.4.0",
+    "@mui/x-date-pickers": "^7.27.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/react": "^19.0.0",
+    "@vitejs/plugin-react": "^6.0.1",
+    "dayjs": "^1.11.13",
+    "jsdom": "^29.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tsup": "^8.4.0",
+    "typescript": "^5.7.0",
+    "vitest": "^4.1.0"
   },
   "peerDependencies": {
     "@emotion/react": "^11.0.0",
@@ -27,17 +49,5 @@
     "dayjs": "^1.11.0",
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0"
-  },
-  "devDependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
-    "@mui/material": "^6.4.0",
-    "@mui/x-date-pickers": "^7.27.0",
-    "@types/react": "^19.0.0",
-    "dayjs": "^1.11.13",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "tsup": "^8.4.0",
-    "typescript": "^5.7.0"
   }
 }
