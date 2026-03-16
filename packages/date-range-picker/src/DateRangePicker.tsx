@@ -8,6 +8,8 @@ import {
   List,
   ListItemButton,
   ListItemText,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -148,6 +150,9 @@ export function DateRangePicker({
     endDate: null,
   });
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const range = value ?? internalRange;
   const setRange = useCallback(
     (newRange: DateRange) => {
@@ -215,7 +220,12 @@ export function DateRangePicker({
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Paper
         elevation={3}
-        sx={{ display: "inline-flex", position: "relative" }}
+        sx={{
+          display: "inline-flex",
+          flexDirection: isMobile ? "column" : "row",
+          position: "relative",
+          maxWidth: "100%",
+        }}
         {...(!isLicensed && {
           "data-mui-drp-license": "unlicensed",
           className: "mui-drp-unlicensed",
@@ -223,20 +233,42 @@ export function DateRangePicker({
       >
         {!isLicensed && <LicenseWatermark />}
 
-        {/* Preset sidebar - full height */}
+        {/* Preset sidebar / top bar on mobile */}
         {presetList && (
           <Box
-            sx={{
-              borderRight: 1,
-              borderColor: "divider",
-              py: 2,
-              px: 1,
-              minWidth: 140,
-              display: "flex",
-              alignItems: "flex-start",
-            }}
+            sx={
+              isMobile
+                ? {
+                    borderBottom: 1,
+                    borderColor: "divider",
+                    py: 1,
+                    px: 1,
+                    display: "flex",
+                    overflowX: "auto",
+                  }
+                : {
+                    borderRight: 1,
+                    borderColor: "divider",
+                    py: 2,
+                    px: 1,
+                    minWidth: 140,
+                    display: "flex",
+                    alignItems: "flex-start",
+                  }
+            }
           >
-            <List dense disablePadding>
+            <List
+              dense
+              disablePadding
+              sx={{
+                ...(isMobile && {
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: 0.5,
+                  width: "100%",
+                }),
+              }}
+            >
               {presetList.map((preset) => {
                 const presetStart = dayjs().subtract(preset.days, "day");
                 const presetEnd = dayjs();
@@ -248,7 +280,11 @@ export function DateRangePicker({
                     key={preset.days}
                     selected={isActive}
                     onClick={() => handlePreset(preset.days)}
-                    sx={{ borderRadius: 1, py: 0.5 }}
+                    sx={{
+                      borderRadius: 1,
+                      py: 0.5,
+                      ...(isMobile && { whiteSpace: "nowrap", flexShrink: 0 }),
+                    }}
                   >
                     <ListItemText
                       primary={preset.label}
@@ -262,8 +298,22 @@ export function DateRangePicker({
         )}
 
         {/* Main content: calendars with date labels */}
-        <Box sx={{ display: "flex", flexDirection: "column", p: 2 }}>
-          <Box sx={{ display: "flex", gap: 0 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            p: 2,
+            maxWidth: "100%",
+            overflow: "hidden",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: isMobile ? "column" : "row",
+              gap: 0,
+            }}
+          >
             {/* Left calendar with start date label */}
             <Box>
               <Box sx={{ px: 1, mb: 1 }}>
