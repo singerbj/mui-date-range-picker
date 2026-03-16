@@ -2,7 +2,7 @@
 
 import { ThemeProvider as MuiThemeProvider, createTheme, CssBaseline } from "@mui/material";
 import { ReactNode, createContext, useContext, useState, useMemo } from "react";
-import { LicenseInfo } from "@mui-date-range-picker/react";
+import { LicenseInfo } from "@indexlabs/mui-date-range-picker";
 
 LicenseInfo.setLicenseKey(
   "eyJvIjoiU0lURS0wMDEiLCJlIjo0MTAyNDQ0ODAwMDAwLCJwIjoiZW50ZXJwcmlzZSJ9.1hgwrud",

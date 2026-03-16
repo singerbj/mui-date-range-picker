@@ -14,7 +14,7 @@
     "clean": "turbo run clean",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo run build && changeset tag",
+    "release": "turbo run build && changeset publish",
     "prepare": "husky"
   },
   "devDependencies": {

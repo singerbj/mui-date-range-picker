@@ -15,7 +15,7 @@ import {
   TableRow,
   Divider,
 } from "@mui/material";
-import { DateRangePicker, DateRangePickerInput, DateRange } from "@mui-date-range-picker/react";
+import { DateRangePicker, DateRangePickerInput, DateRange } from "@indexlabs/mui-date-range-picker";
 
 const dateRangePickerProps = [
   {
@@ -182,8 +182,8 @@ export default function DocsPage() {
         Documentation
       </Typography>
       <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-        <code>@mui-date-range-picker/react</code> provides two components for selecting date ranges
-        using Material UI.
+        <code>@indexlabs/mui-date-range-picker</code> provides two components for selecting date
+        ranges using Material UI.
       </Typography>
 
       <Stack spacing={6}>
@@ -193,7 +193,7 @@ export default function DocsPage() {
             Installation
           </Typography>
           <CodeBlock
-            code={`npm install @mui-date-range-picker/react @mui/material @mui/x-date-pickers @emotion/react @emotion/styled dayjs`}
+            code={`npm install @indexlabs/mui-date-range-picker @mui/material @mui/x-date-pickers @emotion/react @emotion/styled dayjs`}
           />
         </Box>
 
@@ -214,7 +214,7 @@ export default function DocsPage() {
           </Typography>
           <CodeBlock
             code={`import { useState } from "react";
-import { DateRangePicker, DateRange } from "@mui-date-range-picker/react";
+import { DateRangePicker, DateRange } from "@indexlabs/mui-date-range-picker";
 
 function BasicExample() {
   const [range, setRange] = useState<DateRange>({
@@ -307,7 +307,7 @@ function BasicExample() {
 
           <CodeBlock
             code={`import { useState } from "react";
-import { DateRangePickerInput, DateRange } from "@mui-date-range-picker/react";
+import { DateRangePickerInput, DateRange } from "@indexlabs/mui-date-range-picker";
 
 function InputExample() {
   const [range, setRange] = useState<DateRange>({
@@ -383,7 +383,7 @@ interface PresetRange {
           </Typography>
           <CodeBlock
             code={`import { createTheme, ThemeProvider } from "@mui/material";
-import { DateRangePicker } from "@mui-date-range-picker/react";
+import { DateRangePicker } from "@indexlabs/mui-date-range-picker";
 
 const theme = createTheme({
   palette: {

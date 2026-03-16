@@ -19,7 +19,7 @@ import {
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
-import { DateRangePicker, DateRangePickerInput, DateRange } from "@mui-date-range-picker/react";
+import { DateRangePicker, DateRangePickerInput, DateRange } from "@indexlabs/mui-date-range-picker";
 import * as motion from "motion/react-client";
 import { useColorMode } from "@/components/ThemeProvider";
 
@@ -250,7 +250,7 @@ export default function Home() {
               >
                 <Typography variant="body2" sx={{ fontFamily: "monospace", color: textBody }}>
                   <span style={{ color: codeAccent }}>$</span> npm install
-                  @mui-date-range-picker/react
+                  @indexlabs/mui-date-range-picker
                 </Typography>
               </Paper>
             </motion.div>
