@@ -14,10 +14,14 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  IconButton,
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
 import { DateRangePicker, DateRangePickerInput, DateRange } from "@mui-date-range-picker/react";
 import * as motion from "motion/react-client";
+import { useColorMode } from "@/components/ThemeProvider";
 
 function GlowOrb({
   color,
@@ -54,6 +58,9 @@ function GlowOrb({
 }
 
 export default function Home() {
+  const { mode, toggleColorMode } = useColorMode();
+  const isDark = mode === "dark";
+
   const [range, setRange] = useState<DateRange>({
     startDate: null,
     endDate: null,
@@ -64,13 +71,52 @@ export default function Home() {
     endDate: null,
   });
 
+  // Theme-aware colors
+  const textPrimary = isDark ? "#fff" : "#1a1a2e";
+  const textSecondary = isDark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)";
+  const textTertiary = isDark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)";
+  const textMuted = isDark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)";
+  const textSubtle = isDark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)";
+  const textBody = isDark ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.8)";
+  const borderColor = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)";
+  const borderLight = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)";
+  const borderChip = isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.2)";
+  const chipText = isDark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.7)";
+  const surfaceBg = isDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)";
+  const surfaceCard = isDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)";
+  const codeBg = isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)";
+  const pageBg = isDark ? "#0a0e1a" : "#f5f7fa";
+  const gradientText = isDark
+    ? "linear-gradient(135deg, #fff 0%, #90caf9 50%, #ce93d8 100%)"
+    : "linear-gradient(135deg, #1a1a2e 0%, #1976d2 50%, #9c27b0 100%)";
+  const codeAccent = isDark ? "#90caf9" : "#1976d2";
+
   return (
-    <Box sx={{ position: "relative", overflow: "hidden", minHeight: "100vh", bgcolor: "#0a0e1a" }}>
+    <Box sx={{ position: "relative", overflow: "hidden", minHeight: "100vh", bgcolor: pageBg }}>
       {/* Background glow orbs */}
       <GlowOrb color="#1976d2" size={600} top="-10%" left="-5%" delay={0} />
       <GlowOrb color="#9c27b0" size={500} top="20%" left="70%" delay={2} />
       <GlowOrb color="#1976d2" size={400} top="60%" left="30%" delay={4} />
       <GlowOrb color="#9c27b0" size={350} top="80%" left="80%" delay={1} />
+
+      {/* Dark/Light mode toggle - top right */}
+      <IconButton
+        onClick={toggleColorMode}
+        sx={{
+          position: "fixed",
+          top: 16,
+          right: 16,
+          zIndex: 10,
+          bgcolor: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)",
+          color: textPrimary,
+          backdropFilter: "blur(10px)",
+          "&:hover": {
+            bgcolor: isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.15)",
+          },
+        }}
+      >
+        {isDark ? <LightModeIcon /> : <DarkModeIcon />}
+      </IconButton>
 
       <Container maxWidth="lg" sx={{ py: 8, position: "relative", zIndex: 1 }}>
         <Stack spacing={10}>
@@ -86,8 +132,8 @@ export default function Home() {
                 variant="outlined"
                 sx={{
                   mb: 3,
-                  borderColor: "rgba(255,255,255,0.2)",
-                  color: "rgba(255,255,255,0.7)",
+                  borderColor: borderChip,
+                  color: chipText,
                   fontWeight: 500,
                 }}
               />
@@ -102,10 +148,10 @@ export default function Home() {
                 variant="h2"
                 fontWeight={800}
                 sx={{
-                  color: "#fff",
+                  color: textPrimary,
                   mb: 2,
                   fontSize: { xs: "2.5rem", md: "3.5rem" },
-                  background: "linear-gradient(135deg, #fff 0%, #90caf9 50%, #ce93d8 100%)",
+                  background: gradientText,
                   backgroundClip: "text",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -123,7 +169,7 @@ export default function Home() {
               <Typography
                 variant="h6"
                 sx={{
-                  color: "rgba(255,255,255,0.6)",
+                  color: textSecondary,
                   maxWidth: 600,
                   mx: "auto",
                   fontWeight: 400,
@@ -165,14 +211,19 @@ export default function Home() {
                     px: 4,
                     fontWeight: 700,
                     borderRadius: 2,
-                    borderColor: "rgba(255,255,255,0.3)",
-                    color: "#fff",
+                    borderColor: isDark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)",
+                    color: textPrimary,
                     "&:hover": {
-                      borderColor: "rgba(255,255,255,0.6)",
-                      bgcolor: "rgba(255,255,255,0.05)",
+                      borderColor: isDark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)",
+                      bgcolor: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
                     },
                   }}
-                  onClick={() => window.open("/mui-date-range-picker/docs", "_self")}
+                  onClick={() =>
+                    window.open(
+                      "https://mui-date-range-picker.indexlabs.dev/mui-date-range-picker/docs",
+                      "_self",
+                    )
+                  }
                 >
                   Documentation
                 </Button>
@@ -192,16 +243,13 @@ export default function Home() {
                   mx: "auto",
                   maxWidth: 520,
                   p: 2,
-                  bgcolor: "rgba(255,255,255,0.05)",
-                  borderColor: "rgba(255,255,255,0.1)",
+                  bgcolor: codeBg,
+                  borderColor: borderLight,
                   borderRadius: 2,
                 }}
               >
-                <Typography
-                  variant="body2"
-                  sx={{ fontFamily: "monospace", color: "rgba(255,255,255,0.8)" }}
-                >
-                  <span style={{ color: "#90caf9" }}>$</span> npm install
+                <Typography variant="body2" sx={{ fontFamily: "monospace", color: textBody }}>
+                  <span style={{ color: codeAccent }}>$</span> npm install
                   @mui-date-range-picker/react
                 </Typography>
               </Paper>
@@ -216,10 +264,10 @@ export default function Home() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.7, ease: "easeOut" }}
             >
-              <Typography variant="h4" fontWeight={700} sx={{ color: "#fff", mb: 1 }}>
+              <Typography variant="h4" fontWeight={700} sx={{ color: textPrimary, mb: 1 }}>
                 Inline Calendar
               </Typography>
-              <Typography variant="body1" sx={{ color: "rgba(255,255,255,0.5)", mb: 3 }}>
+              <Typography variant="body1" sx={{ color: textTertiary, mb: 3 }}>
                 Dual-calendar view with preset range options and action buttons.
               </Typography>
             </motion.div>
@@ -234,11 +282,12 @@ export default function Home() {
                 sx={{
                   p: 3,
                   borderRadius: 3,
-                  bgcolor: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.08)",
+                  bgcolor: surfaceBg,
+                  border: `1px solid ${borderColor}`,
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
+                  overflowX: "auto",
                 }}
               >
                 <DateRangePicker
@@ -250,7 +299,7 @@ export default function Home() {
                   onClear={() => console.log("Cleared")}
                 />
                 {range.startDate && range.endDate && (
-                  <Typography sx={{ mt: 2, color: "rgba(255,255,255,0.7)" }}>
+                  <Typography sx={{ mt: 2, color: textSecondary }}>
                     Selected: {range.startDate.format("YYYY-MM-DD")} to{" "}
                     {range.endDate.format("YYYY-MM-DD")}
                   </Typography>
@@ -267,10 +316,10 @@ export default function Home() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.7, ease: "easeOut" }}
             >
-              <Typography variant="h4" fontWeight={700} sx={{ color: "#fff", mb: 1 }}>
+              <Typography variant="h4" fontWeight={700} sx={{ color: textPrimary, mb: 1 }}>
                 Input with Popover
               </Typography>
-              <Typography variant="body1" sx={{ color: "rgba(255,255,255,0.5)", mb: 3 }}>
+              <Typography variant="body1" sx={{ color: textTertiary, mb: 3 }}>
                 Click the input to open the date range picker in a popover.
               </Typography>
             </motion.div>
@@ -284,10 +333,11 @@ export default function Home() {
               <Box
                 sx={{
                   maxWidth: 400,
+                  mx: "auto",
                   p: 3,
                   borderRadius: 3,
-                  bgcolor: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.08)",
+                  bgcolor: surfaceBg,
+                  border: `1px solid ${borderColor}`,
                 }}
               >
                 <DateRangePickerInput
@@ -311,7 +361,7 @@ export default function Home() {
               <Typography
                 variant="h4"
                 fontWeight={700}
-                sx={{ color: "#fff", mb: 4, textAlign: "center" }}
+                sx={{ color: textPrimary, mb: 4, textAlign: "center" }}
               >
                 Features
               </Typography>
@@ -361,8 +411,8 @@ export default function Home() {
                     sx={{
                       p: 3,
                       height: "100%",
-                      bgcolor: "rgba(255,255,255,0.04)",
-                      border: "1px solid rgba(255,255,255,0.08)",
+                      bgcolor: surfaceCard,
+                      border: `1px solid ${borderColor}`,
                       borderRadius: 2,
                       transition: "border-color 0.3s, box-shadow 0.3s",
                       "&:hover": {
@@ -372,13 +422,10 @@ export default function Home() {
                     }}
                     elevation={0}
                   >
-                    <Typography variant="h6" fontWeight={600} sx={{ color: "#fff", mb: 1 }}>
+                    <Typography variant="h6" fontWeight={600} sx={{ color: textPrimary, mb: 1 }}>
                       {feature.title}
                     </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{ color: "rgba(255,255,255,0.5)", lineHeight: 1.6 }}
-                    >
+                    <Typography variant="body2" sx={{ color: textTertiary, lineHeight: 1.6 }}>
                       {feature.desc}
                     </Typography>
                   </Paper>
@@ -387,7 +434,7 @@ export default function Home() {
             </Box>
           </Box>
 
-          <Divider sx={{ borderColor: "rgba(255,255,255,0.08)" }} />
+          <Divider sx={{ borderColor }} />
 
           {/* Pricing Section */}
           <Box sx={{ textAlign: "center" }}>
@@ -397,12 +444,12 @@ export default function Home() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.7, ease: "easeOut" }}
             >
-              <Typography variant="h4" gutterBottom fontWeight={700} sx={{ color: "#fff" }}>
+              <Typography variant="h4" gutterBottom fontWeight={700} sx={{ color: textPrimary }}>
                 Enterprise License
               </Typography>
               <Typography
                 variant="body1"
-                sx={{ mb: 4, maxWidth: 600, mx: "auto", color: "rgba(255,255,255,0.5)" }}
+                sx={{ mb: 4, maxWidth: 600, mx: "auto", color: textTertiary }}
               >
                 Get unrestricted access to the full source code, direct support from the
                 maintainers, and everything you need to ship with confidence.
@@ -423,7 +470,7 @@ export default function Home() {
                   p: 4,
                   borderRadius: 3,
                   border: "1px solid rgba(25, 118, 210, 0.4)",
-                  bgcolor: "rgba(255,255,255,0.04)",
+                  bgcolor: surfaceCard,
                   position: "relative",
                   overflow: "visible",
                   boxShadow: "0 0 40px rgba(25, 118, 210, 0.15)",
@@ -442,14 +489,18 @@ export default function Home() {
                   }}
                 />
 
-                <Typography variant="h3" fontWeight={800} sx={{ mt: 1, mb: 0.5, color: "#fff" }}>
+                <Typography
+                  variant="h3"
+                  fontWeight={800}
+                  sx={{ mt: 1, mb: 0.5, color: textPrimary }}
+                >
                   $250,000
                 </Typography>
-                <Typography variant="body2" sx={{ mb: 3, color: "rgba(255,255,255,0.5)" }}>
+                <Typography variant="body2" sx={{ mb: 3, color: textTertiary }}>
                   One-time license fee — no recurring costs, ever.
                 </Typography>
 
-                <Divider sx={{ mb: 2, borderColor: "rgba(255,255,255,0.08)" }} />
+                <Divider sx={{ mb: 2, borderColor }} />
 
                 <List dense disablePadding>
                   {[
@@ -470,7 +521,7 @@ export default function Home() {
                         primary={item}
                         primaryTypographyProps={{
                           variant: "body2",
-                          sx: { color: "rgba(255,255,255,0.8)" },
+                          sx: { color: textBody },
                         }}
                       />
                     </ListItem>
@@ -494,10 +545,7 @@ export default function Home() {
                   Contact Sales
                 </Button>
 
-                <Typography
-                  variant="caption"
-                  sx={{ display: "block", mt: 2, color: "rgba(255,255,255,0.4)" }}
-                >
+                <Typography variant="caption" sx={{ display: "block", mt: 2, color: textSubtle }}>
                   Includes a 30-day evaluation period with full refund guarantee.
                 </Typography>
               </Paper>
@@ -506,7 +554,7 @@ export default function Home() {
 
           {/* Footer */}
           <Box sx={{ textAlign: "center", py: 4 }}>
-            <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.3)" }}>
+            <Typography variant="body2" sx={{ color: textMuted }}>
               &copy; {new Date().getFullYear()} MUI Date Range Picker
             </Typography>
           </Box>
